@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_rq',
     'apps.images',
 ]
 
@@ -84,6 +85,19 @@ DATABASES = {
     }
 }
 
+
+# django rq
+RQ_PASSWD = json.loads(open('/opt/lcspace_conf/rq.json').read())['PASSWORD']
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'QUEUE_CLASS': 'module.path.CustomClass',
+        'PASSWORD': RQ_PASSWD
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

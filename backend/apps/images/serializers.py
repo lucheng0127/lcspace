@@ -12,6 +12,10 @@ from rest_framework import serializers
 class OSISOSerializer(serializers.ModelSerializer):
     class Meta:
         model = OSISO
-        fields = '__all__'
-        read_only_fields = ('id',)
+        fields = ('id', 'os_type', 'name', 'md5', 'iso',  'status', 'status_cn', 'upload_time_str',)
+        read_only_fields = ('id', 'name', 'status_cn', 'upload_time_str',)
+        extra_kwargs = {
+            'iso': {'write_only': True},
+            'status': {'write_only': True},
+        }
 

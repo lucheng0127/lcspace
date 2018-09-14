@@ -20,14 +20,10 @@ class OSISOViewSet(mixins.CreateModelMixin,
     """
     operate system iso upload, get iso list and delete iso
     """
-    queryset = OSISO.objects.all()
+    queryset = OSISO.objects.all().exclude(status='FAILED')
     serializer_class = OSISOSerializer
     permission_classes = []
 
-    def list(self, request):
-       isos = [i for i in os.listdir('/opt/iso') if os.path.isfile(os.path.join('/opt/iso', i)) and os.path.splitext(i)[1] == '.iso']
-       return Response({'data': isos}, status=status.HTTP_200_OK)
-    
     def create(self, request):
         pass
 
