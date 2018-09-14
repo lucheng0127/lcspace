@@ -94,9 +94,8 @@ RQ_QUEUES = {
         'HOST': 'localhost',
         'PORT': 6379,
         'DB': 0,
-        'QUEUE_CLASS': 'module.path.CustomClass',
-        'PASSWORD': RQ_PASSWD
-    }
+        'PASSWORD': RQ_PASSWD,
+    },
 }
 
 # Password validation
