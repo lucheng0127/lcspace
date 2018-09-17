@@ -17,13 +17,13 @@ logging.basicConfig(filename='/opt/log/image_tasks.log', level=logging.INFO, for
 logger = logging.getLogger()
 
 @job
-def upload_iso(file, md5_str):
-    with open(os.path.join('/opt/iso', file.name), 'wb+') as dst_f:
+def upload_iso(file, md5_str, filename):
+    with open(os.path.join('/opt/iso', filename), 'wb+') as dst_f:
         for chunk in file.chunks():
             dst_f.write(chunk)
         dst_f.close()
-        logger.info('file {} upload succeed'.format(file.name))
-        file_path = os.path.join('/opt/iso', file.name)
+        logger.info('file {} upload succeed'.format(filename))
+        file_path = os.path.join('/opt/iso', filename)
         args = ['md5sum']
         args.append(os.path.join(file_path))
         logger.info(args)

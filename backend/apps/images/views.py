@@ -6,6 +6,7 @@
 
 import hashlib
 import os
+import uuid
 
 import django_rq
 
@@ -33,12 +34,25 @@ class OSISOViewSet(mixins.CreateModelMixin,
         iso_f = request.FILES['iso']
 
         # 特殊字符校验
+        if not md5 or not iso_f:
+            return Response({'msg': u'请选择系统镜像文件,并填写MD5!'}, status=status.HTTP_400_BAD_REQUEST)
+        if OSISO.objects.filter(md5=md5):
+            return Response({'msg': u'系统镜像已存在!'}, status=status.HTTP_400_BAD_REQUEST)
+        # 文件重命名
+        f_name, f_type = str(iso_f.name).rsplit('.', 1)
+        if str(f_type) != 'iso':
+            return Response({'msg': u'请选择正确的系统镜像文件!'}, status=status.HTTP_400_BAD_REQUEST)
+        f_name = str(f_name).replace(' ', '') 
+        f_name = str(f_name).replace('.', '') 
+        f_name = str(f_name).replace('-', '_') 
+        f_name = str(f_name).replace('/', '') 
+        f_name = f_name + str(uuid.uuid1())[:8] + '.'  + f_type
 
         # 保存数据，并上传文件
         try:
-            obj = OSISO(os_type=os_type, md5=md5, iso=os.path.join('/opt/iso', iso_f.name))
+            obj = OSISO(os_type=os_type, md5=md5, iso=os.path.join('/opt/iso', f_name))
             obj.save()
-            upload_iso.delay(iso_f, md5)
+            upload_iso.delay(iso_f, md5, filename=f_name)
             return Response({'data': OSISOSerializer(obj).data, 'msg': 'Created!'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
