@@ -5,13 +5,23 @@
               <Menu mode="horizontal" theme="dark" active-name="1">
                   <div class="layout-logo"></div>
                   <div class="layout-nav">
-                      <Icon type="ios-navigate"></Icon>
+                    <Dropdown>
+                      <a href="javascript:void(0)">
+                        <Icon type="ios-contact" size="24" color="#F0F0F0" />
+                      </a>
+                      <DropdownMenu slot="list">
+                        <DropdownItem>修改密码</DropdownItem>
+                        <DropdownItem>安全退出</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
                   </div>
               </Menu>
           </Header>
           <Content :style="{padding: '0 50px'}">
               <Breadcrumb :style="{margin: '20px 0'}">
-                  <BreadcrumbItem>Home</BreadcrumbItem>
+                  <BreadcrumbItem to="/">
+                    <Icon type="ios-home-outline"></Icon> Home
+                  </BreadcrumbItem>
                   <BreadcrumbItem>Components</BreadcrumbItem>
                   <BreadcrumbItem>Layout</BreadcrumbItem>
               </Breadcrumb>
@@ -46,7 +56,7 @@
     left: 20px;
 }
 .layout-nav{
-    width: 420px;
+    width: 150px;
     margin: 0 auto;
     margin-right: 20px;
 }
