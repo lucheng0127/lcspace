@@ -24,7 +24,7 @@ class OSISOViewSet(mixins.CreateModelMixin,
     """
     operate system iso upload, get iso list and delete iso
     """
-    queryset = OSISO.objects.all().exclude(status='FAILED')
+    queryset = OSISO.objects.all()
     serializer_class = OSISOSerializer
     permission_classes = []
 
@@ -52,7 +52,7 @@ class OSISOViewSet(mixins.CreateModelMixin,
         try:
             obj = OSISO(os_type=os_type, md5=md5, iso=os.path.join('/opt/iso', f_name))
             obj.save()
-            upload_iso.delay(iso_f, md5, filename=f_name)
+            upload_iso.delay(iso_f, obj.id, f_name)
             return Response({'data': OSISOSerializer(obj).data, 'msg': 'Created!'}, status=status.HTTP_200_OK)
         except Exception as e:
             print(e)

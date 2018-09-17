@@ -17,7 +17,7 @@ logging.basicConfig(filename='/opt/log/image_tasks.log', level=logging.INFO, for
 logger = logging.getLogger()
 
 @job
-def upload_iso(file, md5_str, filename):
+def upload_iso(file, obj_id, filename):
     with open(os.path.join('/opt/iso', filename), 'wb+') as dst_f:
         for chunk in file.chunks():
             dst_f.write(chunk)
@@ -33,9 +33,17 @@ def upload_iso(file, md5_str, filename):
         if not stderr:
             iso_md5 = str(stdout)[2:34]
             logger.info('file md5 str is \n{}'.format(iso_md5))
+            obj = OSISO.objects.get(id=obj_id)
+            logger.info('get obj id {}'.format(obj.id))
+            md5_str = obj.md5
             if iso_md5 == md5_str:
-                obj = OSISO.objects.get(md5=md5_str)
-                logger.info('get obj id {}'.format(obj.id))
+                logger.info('iso file {} upload succeed!'.format(filename))
                 obj.status = 'FINISHED'
                 obj.save()
+            else:
+                logger.error('iso file {} upload failed, MD5 not match!'.format(filename))
+                obj.status = 'FAILED'
+                obj.save()
+                if os.path.isfile(os.path.join('/opt/iso', filename)):
+                    os.remove(os.path.join('/opt/iso', filename))
 
