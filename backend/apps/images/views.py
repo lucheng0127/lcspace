@@ -10,6 +10,7 @@ import uuid
 
 import django_rq
 
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
 
@@ -60,6 +61,12 @@ class OSISOViewSet(mixins.CreateModelMixin,
             
 
     def destroy(self, request, pk=None):
+        obj = get_object_or_404(OSISO, id=pk)
+        filename = os.path.join('/opt/iso', obj.name)
+        if os.path.isfile(filename):
+            os.remove(filename)
+        obj.delete()
+        return Response({'msg': u'删除系统镜像{}成功!'.format(obj.name)}, status=status.HTTP_200_OK)
         pass
        
 
