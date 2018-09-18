@@ -18,16 +18,9 @@
               </Menu>
           </Header>
           <Content :style="{padding: '0 50px'}">
-              <Breadcrumb :style="{margin: '20px 0'}">
-                  <BreadcrumbItem to="/">
-                    <Icon type="ios-home-outline"></Icon> Home
-                  </BreadcrumbItem>
-                  <BreadcrumbItem>Components</BreadcrumbItem>
-                  <BreadcrumbItem>Layout</BreadcrumbItem>
-              </Breadcrumb>
+              <tab-bar/>
               <Card>
                   <div style="min-height: 200px;">
-                      Content
                       <nuxt/>
                   </div>
               </Card>
@@ -36,6 +29,16 @@
       </Layout>
   </div>
 </template>
+
+<script>
+import TabBar from '~/components/TabBar.vue'
+
+export default {
+  components: {
+    TabBar
+  }
+}
+</script>
 
 <style scoped>
 .layout{
