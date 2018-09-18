@@ -5,7 +5,22 @@
 </div>
 </template>
 <script>
+    import axios from 'axios'
+    const ISO_URL = 'http://10.66.117.2:8000/iso/'
+
     export default {
+        asyncData ({ parmas, error }) {
+          return axios({
+            method: 'get',
+            url: ISO_URL
+          })
+          .then((res) => {
+            return { data: res.data }
+          })
+          .catch((e) => {
+            console.log(e.request)
+          })
+        },
         data () {
             return {
                 columns: [
@@ -63,25 +78,9 @@
                         }
                     }
                 ],
-                data: [
-                        {
-                          "id": 1,
-                          "os_type": "Linux",
-                          "name": "CentOS-7-x86_64-Minimal-1804.iso",
-                          "md5": "fabdc67ff3a1674a489953effa285dfd",
-                          "status_cn": "上传完成",
-                          "upload_time_str": "2018-09-13 17:05:37"
-                        },
-                        {
-                          "id": 2,
-                          "os_type": "Linux",
-                          "name": "archlinux-2018.08.01-x86_64.iso",
-                          "md5": "112fe4369fd9de0bdeb22b84d411d018",
-                          "status_cn": "上传完成",
-                          "upload_time_str": "2018-09-13 17:05:38"
-                        }
-                ]
-            }
+                data: [],
+                e_msg: ''
+          }
         },
         methods: {
             remove (index) {
