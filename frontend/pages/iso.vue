@@ -1,11 +1,12 @@
 <template>
 <div>
-    <Button style="margin-bottom: 10px" shape="circle" icon="ios-cloud-upload-outline">上传镜像</Button>
+    <iso-upload/>
     <Table border :columns="columns" :data="data"></Table>
 </div>
 </template>
 <script>
     import axios from 'axios'
+    import IsoUpload from '~/components/IsoUpload.vue'
     const ISO_URL = 'http://10.66.117.2:8000/iso/'
 
     export default {
@@ -20,6 +21,9 @@
           .catch((e) => {
             console.log(e.request)
           })
+        },
+        components: {
+          IsoUpload
         },
         data () {
             return {
