@@ -18,21 +18,22 @@
                 multiple
                 type="drag"
                 :before-upload="handleUpload"
-                action="">
+                :data='{os_type: this.formData.os_type, md5: this.formData.md5 }'
+                action="http://10.66.117.2:8000/iso/"
+                name="iso">
                 <div style="padding: 20px 0">
                   <Icon type="ios-cloud-upload" size="52"></Icon>
                   <p>点击或拖拽文件至此上传</p>
                 </div>
               </Upload>
             </Form>
-            <div class="demo-drawer-footer">
-                <Button style="margin-right: 8px" @click="value = false">Cancel</Button>
-                <Button type="primary" @click="value = false">Submit</Button>
-            </div>
         </Drawer>    
     </div>
 </template>
 <script>
+    import axios from 'axios'
+    const OS_TYPE_URL = 'http://10.66.117.2:8000/iso/os_type/'
+
     export default {
         data () {
             return {
@@ -49,18 +50,12 @@
                     msg: ''
                 },
                 osList: [
-                  {
-                    value: 'Linux',
-                    label: 'Linux',
-                  },
-                  {
-                    value: 'Unix',
-                    label: 'Unix',
-                  },
-                  {
-                    value: 'BSD',
-                    label: 'BSD',
-                  },
+                  {value: 'Linux', label: 'Linux'},
+                  {value: 'Windows', label: 'Microsoft Windows'},
+                  {value: 'BSD', label: 'BSD'},
+                  {value: 'Unix', label: 'Unix'},
+                  {value: 'MacOS', label: 'MacOS'},
+                  {value: 'Other', label: 'Other'},
                 ],
             }
         },
@@ -70,6 +65,9 @@
                     this.formData.msg = '请选择系统类型并填写md5!'
                     return false
                 }
+            },
+            go2 (url) {
+                this.$router.push(url)
             }
         }
     }

@@ -13,6 +13,7 @@ import django_rq
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from apps.images.models import OSISO
 from apps.images.serializers import OSISOSerializer
@@ -69,5 +70,16 @@ class OSISOViewSet(mixins.CreateModelMixin,
         return Response({'msg': u'删除系统镜像{}成功!'.format(obj.name)}, status=status.HTTP_200_OK)
         pass
        
+
+    @action(detail=False)
+    def os_type(self, request):
+        data = dict()
+        data['Linux'] = 'Linux'
+        data['Windows'] = 'Microsoft Windows'
+        data['BSD'] = 'BSD'
+        data['Unix'] = 'Unix'
+        data['MacOS'] = 'MacOS'
+        data['Other'] = 'Other'
+        return Response(data, status=status.HTTP_200_OK)
 
 # hashlib.md5(str(open('models.py').read()).encode('utf-8')).hexdigest()
