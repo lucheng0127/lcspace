@@ -4,11 +4,26 @@
         <Drawer
             title="上传镜像"
             v-model="value"
-            width="720"
+            width="420"
             :mask-closable="false"
             :styles="styles"
         >
-           <Form :model="formData">
+            <Form :model="formData">
+              <Alert v-if="formData.msg" banner closable type="warning">{{ formData.msg }}</Alert>
+              <Select v-model="formData.os_type" style="width:200px">
+                <Option v-for="item in osList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+              <Input v-model="formData.md5" placeholder="文件MD5" style="width: 300px" />
+              <Upload
+                multiple
+                type="drag"
+                :before-upload="handleUpload"
+                action="">
+                <div style="padding: 20px 0">
+                  <Icon type="ios-cloud-upload" size="52"></Icon>
+                  <p>点击或拖拽文件至此上传</p>
+                </div>
+              </Upload>
             </Form>
             <div class="demo-drawer-footer">
                 <Button style="margin-right: 8px" @click="value = false">Cancel</Button>
@@ -29,14 +44,32 @@
                     position: 'static'
                 },
                 formData: {
-                    name: '',
-                    url: '',
-                    owner: '',
-                    type: '',
-                    approver: '',
-                    date: '',
-                    desc: ''
+                    os_type: '',
+                    md5: '',
+                    msg: ''
                 },
+                osList: [
+                  {
+                    value: 'Linux',
+                    label: 'Linux',
+                  },
+                  {
+                    value: 'Unix',
+                    label: 'Unix',
+                  },
+                  {
+                    value: 'BSD',
+                    label: 'BSD',
+                  },
+                ],
+            }
+        },
+        methods: {
+            handleUpload (file) {
+                if (this.formData.md5 == '' || this.formData.os_type == '') {
+                    this.formData.msg = '请选择系统类型并填写md5!'
+                    return false
+                }
             }
         }
     }
