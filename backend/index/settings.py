@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_rq',
     'apps.images',
     'apps.hosts',
+    'apps.machines',
 ]
 
 MIDDLEWARE = [
