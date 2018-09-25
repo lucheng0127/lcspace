@@ -21,5 +21,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.images.urls')),
+    path('', include('apps.machines.urls')),
     path('django-rq/', include('django_rq.urls')),
 ]
