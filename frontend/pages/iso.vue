@@ -74,10 +74,10 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.remove(params)
                                         }
                                     }
-                                }, 'Delete')
+                                }, '删除')
                             ]);
                         }
                     }
@@ -87,8 +87,10 @@
           }
         },
         methods: {
-            remove (index) {
-                this.data.splice(index, 1);
+            remove (params) {
+                this.data.splice(params.index, 1)
+                let delete_url = ISO_URL + params.row.id
+                axios.delete(delete_url)   
             }
         }
     }
