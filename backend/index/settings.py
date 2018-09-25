@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_rq',
     'apps.images',
+    'apps.hosts',
 ]
 
 MIDDLEWARE = [
