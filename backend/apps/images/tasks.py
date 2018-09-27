@@ -13,7 +13,7 @@ from django_rq import job
 from apps.images.models import OSISO
 
 format_str = '%(levelname)s: %(asctime)s %(message)s'
-logging.basicConfig(filename='/opt/log/image_tasks.log', level=logging.INFO, format=format_str)
+logging.basicConfig(filename='/opt/log/rq_tasks.log', level=logging.INFO, format=format_str)
 logger = logging.getLogger()
 
 @job

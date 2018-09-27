@@ -9,6 +9,7 @@ from rest_framework.response import Response
 
 from apps.machines.models import VMachines, MachineConfig
 from apps.machines.serializer import VMachinesSerializer
+from apps.machines.tasks import create_vm_task
 
 
 class MachineViewSet(viewsets.ModelViewSet):
@@ -29,5 +30,13 @@ class MachineViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         print(request.data)
+        name = request.data.get('name')
+        configs = request.data.get('configs')
+        size = request.data.get('configs.disk_size')
+        iso = request.data.get('configs.iso')
+        mem = request.data.get('configs.memory')
+        vcpu = request.data.get('configs.vcpu')
+        dom = create_vm_task.delay(None, name, mem, vcpu, size, iso)
+
         return Response(status=status.HTTP_200_OK)
 
