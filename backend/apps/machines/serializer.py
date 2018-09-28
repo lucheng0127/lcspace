@@ -21,6 +21,6 @@ class VMachinesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VMachines
-        fields = ('id', 'name', 'uuid', 'create_time_str', 'configs',)
-        read_only_filelds = ('id', 'uuid', 'create_time_str')
+        fields = ('id', 'name', 'uuid', 'create_time_str', 'status_cn', 'configs',)
+        read_only_filelds = ('id', 'uuid', 'create_time_str', 'status_cn',)
 

@@ -9,6 +9,8 @@ import logging
 
 from django_rq import job
 
+from apps.machines.models import VMachines, MachineConfig
+
 from utils.host import Host 
 from utils.dom_utils import create_img, ConfigureVM, VMInstance
 
@@ -47,14 +49,20 @@ def create_vm_task(conn, name, mem, cpu_num, disk_size, iso):
     xml_file = result['data']
     logger.info('Configure vm succeed, xml file %s', xml_file)
     # 根据xml配置文件创建虚拟机
+    device_obj = VMachines.objects.get(name=name)
     vm_ins = VMInstance()
     result = vm_ins.create_vm(conn, xml_file)
-    if not int(result['rsp_code']) == 0:
+    if not (int(result['rsp_code']) == 0 and result['data']):
         logger.error('Create vm failed!')
+        device_obj.status = 'Failed'
+        device_obj.save()
         # 删除配置文件和镜像
         if os.path.isfile(img_file):
             os.remove(img_file)
         return False
+    device_obj.status = 'Running'
+    device_obj.uuid = result['data'].UUIDString()
+    device_obj.save()
     logger.info('Create vm %s succeed!', name)
     return True
 

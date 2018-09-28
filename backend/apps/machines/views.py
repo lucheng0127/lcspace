@@ -36,6 +36,10 @@ class MachineViewSet(viewsets.ModelViewSet):
         iso = request.data.get('configs.iso')
         mem = request.data.get('configs.memory')
         vcpu = request.data.get('configs.vcpu')
+        device = VMachines(name=name)
+        device.save()
+        device_conf = MachineConfig(memory=mem, vcpu=vcpu, disk_size=size, iso=iso, img=str(name) + '.img', device=device)
+        device_conf.save()
         dom = create_vm_task.delay(None, name, mem, vcpu, size, iso)
 
         return Response(status=status.HTTP_200_OK)
