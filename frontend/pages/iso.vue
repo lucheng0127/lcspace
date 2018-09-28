@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="min-height: 76vh">
     <iso-upload/>
     <Table border :columns="columns" :data="data"></Table>
 </div>
@@ -95,3 +95,4 @@
         }
     }
 </script>
+

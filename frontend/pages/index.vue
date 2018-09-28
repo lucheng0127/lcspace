@@ -1,65 +1,85 @@
 <template>
   <section class="container">
-    <div>
-      <app-logo/>
-      <h1 class="title">
-        lcspace
-      </h1>
-      <h2 class="subtitle">
-        frontend proj for qemu virtual machine manage
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
-    </div>
+    <Table border :columns="columns" :data="data"></Table>
   </section>
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
+import axios from 'axios'
+const VM_URL = 'http://10.66.117.2:8000/devices/'
 
 export default {
-  components: {
-    AppLogo
+  asyncData ({ params, error }) {
+    return axios({
+      method: 'get',
+     url: VM_URL
+    })
+    .then((res) => {
+      return { data: res.data }
+    })
+    .catch((e) => {
+      console.log(e.request)
+    })
+  },
+  data () {
+      return {
+          columns: [
+              {
+                  title: '虚拟机',
+                  key: 'name',
+                  width: 150
+              },
+              {
+                  title: 'UUID',
+                  key: 'uuid'
+              },
+              {
+                  title: '创建时间',
+                  key: 'create_time_str',
+                  width: 150
+              },
+              {
+                  title: '状态',
+                  key: 'status_cn',
+                  width:100
+              },
+              {
+                  title: '操作',
+                  key: 'action',
+                  width: 150,
+                  align: 'center',
+                  render: (h, params) => {
+                      return h('div', [
+                          h('Button', {
+                              props: {
+                                  type: 'error',
+                                  size: 'small'
+                              },
+                              on: {
+                                  click: () => {
+                                      this.remove(params.index)
+                                  }
+                              }
+                         }, 'Delete')
+                      ]);
+                  }
+              }
+          ],
+          data: [
+          ]
+      }
+  },
+  methods: {
+      remove (index) {
+          this.data6.splice(index, 1);
+      }
   }
 }
 </script>
 
 <style>
 .container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  min-height: 76vh;
 }
 </style>
 
